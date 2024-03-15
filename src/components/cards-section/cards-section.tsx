@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './cardsSection.module.css';
 import Card from '../card/card';
 import Container from '../container/container';
+import Spiner from '../spiner/spiner';
 
 type PictureProps = {
   farm: string;
@@ -13,19 +14,28 @@ type PictureProps = {
   ownerName: string;
 };
 
-type PicturesProps = Array<PictureProps> | null;
+type PicturesProps = PictureProps[];
 
 const CardsSection = () => {
-  const [pictures, setPictures] = useState<PicturesProps>();
+  const [pictures, setPictures] = useState<PicturesProps>([]);
+  const [loaded, setLoaded] = useState(false);
+  const [page, setPage] = useState(1);
+  const [inputText, setInputText] = useState('');
+
+  const defaultTags = 'surreal,art,colorful';
+
+  const nextPage = () => {
+    setPage(page + 1);
+  }
 
   useEffect(() => {
-    getData();
+    getData(page, inputText || defaultTags);
     // eslint-disable-next-line
-  }, []);
+  }, [page]);
 
-  const getData = async () => {
+  const getData = async (page: number, inputText: string) => {
     try {
-      const response = await fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.REACT_APP_API_KEY}&tags=surreal&per_page=20&format=json&nojsoncallback=1`)
+      const response = await fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.REACT_APP_API_KEY}&tags=${inputText}&page=${page}&per_page=15&format=json&nojsoncallback=1`)
       const data = await response.json();
       const picturesArr = data.photos.photo;
 
@@ -34,7 +44,13 @@ const CardsSection = () => {
           const ownerName = await getAuthorName(picture.owner);
           return { ...picture, ownerName };
         }));
-        setPictures(updatedPictures);
+
+        const uniquePictures = updatedPictures.filter(picture => !pictures.some(existingPicture => existingPicture.id === picture.id));
+
+        setPictures((prev) => [...prev, ...uniquePictures]);
+        setLoaded(true);
+
+        // console.log(uniquePictures);
       }
     } catch (err) {
       console.log(err);
@@ -57,21 +73,43 @@ const CardsSection = () => {
     }
   }
 
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setPage(1);
+    setPictures([]);
+    setLoaded(false);
+    getData(page, inputText)
+  }
 
   return (
     <div className={styles.picturesSectionWrapper}>
       <Container>
-        <div className={styles.picturesSection}>
-          {pictures && pictures.map((picture: PictureProps) => (
-            <Card
-              key={picture.id}
-              id={picture.id}
-              pictureName={picture.title}
-              authorName={picture.ownerName}
-              pictureUrl={`https://live.staticflickr.com/${picture.server}/${picture.id}_${picture.secret}.jpg`}
-            />
-          ))}
-        </div>
+        <h2 className={styles.title}>Explore over <span>2 billion</span> images</h2>
+        <form className={styles.searchBox} id='searchBox' onSubmit={handleSearch} >
+          <input 
+            type='text'
+            name='inputText'
+            placeholder='Enter tag, e.g dogs,red' 
+            value={inputText}
+            onChange={(event) => setInputText(event.target.value)}
+          />
+          <button type='submit'>Search</button>
+        </form>
+        {loaded ?
+          (<div className={styles.picturesSection} id='picturesSection'>
+            {pictures && pictures.map((picture: PictureProps, index) => (
+              <Card
+                key={picture.id}
+                id={picture.id}
+                pictureName={picture.title}
+                authorName={picture.ownerName}
+                pictureUrl={`https://live.staticflickr.com/${picture.server}/${picture.id}_${picture.secret}.jpg`}
+                isLast={index === pictures.length - 1}
+                nextPage={nextPage}
+              />
+            ))}
+          </div>) : <Spiner />
+        }
       </Container>
     </div>
   )

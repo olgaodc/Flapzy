@@ -4,10 +4,11 @@
 
 body {
   margin: 0;
+  color: rgb(29, 28, 28);
   background-color: #E6E6E6;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
-button {
-  font-family: "Quicksand", sans-serif;
+button, input {
+  font-family: "Inter", sans-serif;
 }

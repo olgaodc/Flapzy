@@ -1,0 +1,18 @@
+/* .headerWrapper {
+
+} */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.logo {
+  color: #D50032;
+  font-family: "Madimi One", sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+}

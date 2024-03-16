@@ -59,7 +59,6 @@ const CardsSection = () => {
 
         setPictures((prev) => [...prev, ...uniquePictures]);
         setLoaded(true);
-        // console.log(uniquePictures);
       }
     } catch (err) {
       console.log(err);
@@ -87,31 +86,25 @@ const CardsSection = () => {
     setPage(1);
     setPictures([]);
     setLoaded(false);
-    getData(page, inputText)
-  }
-
-  const SearchBox = () => {
-    return (
-      <form className={styles.searchBox} id='searchBox' onSubmit={handleSearch} >
-        <input
-          type='text'
-          name='inputText'
-          placeholder='Enter tag, e.g dogs,red'
-          autoComplete='off'
-          maxLength={30}
-          value={inputText}
-          onChange={(event) => setInputText(event.target.value)}
-        />
-        <button type='submit'>Search</button>
-      </form>
-    )
+    getData(page, inputText);
   }
 
   return (
     <div className={styles.picturesSectionWrapper} id='picturesSection'>
       <Container>
         <h2 className={styles.title}>Explore over <span>2 billion</span> images</h2>
-        <SearchBox />
+        <form className={styles.searchBox} id='searchBox' onSubmit={handleSearch}>
+          <input
+            type='text'
+            name='inputText'
+            placeholder='Enter tag, e.g cats'
+            autoComplete='off'
+            maxLength={30}
+            value={inputText}
+            onChange={(event) => setInputText(event.target.value)}
+          />
+          <button type='submit'>Search</button>
+        </form>
         {loaded ? (
           <div className={styles.picturesSection} id='picturesSection'>
             {pictures.length > 0 ? (

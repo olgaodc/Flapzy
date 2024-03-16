@@ -49,7 +49,7 @@ const Card: FC<CardProps> = ({
           }
           observer.unobserve(entry.target);
           if(isLast) {
-            nextPage()
+            nextPage();
           };
         }
       },

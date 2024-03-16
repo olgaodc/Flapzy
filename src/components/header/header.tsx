@@ -8,7 +8,6 @@ const Header = () => {
       <Container>
         <div className={styles.header}>
           <div className={styles.logo}>Flapzy</div>
-          <div>Favoutites</div>
         </div>
       </Container>
     </div>

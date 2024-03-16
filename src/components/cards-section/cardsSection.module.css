@@ -1,5 +1,5 @@
 .picturesSectionWrapper {
-  margin: 100px 0;
+  margin: 100px 0 50px;
 }
 
 .picturesSection {
@@ -7,6 +7,7 @@
   flex-wrap: wrap;
   gap: 30px;
   margin-top: 50px;
+  position: relative;
 }
 
 .title {
@@ -51,13 +52,33 @@
   background-color: #b9012c;
 }
 
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.emptyText {
+  font-size: 18px;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .picturesSection {
     justify-content: center;
   }
+
+  .searchBox input {
+    width: 100%;
+  }
 }
 
 @media (max-width: 576px) {
+  .title {
+    font-size: 34px;
+  }
+
   .picturesSection {
     gap: 20px;
   }

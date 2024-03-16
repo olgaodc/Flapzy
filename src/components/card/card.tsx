@@ -40,8 +40,6 @@ const Card: FC<CardProps> = ({
   }, [])
 
   useEffect(() => {
-    // if (!imageRef?.current) return;
-
     if (imageRef.current) {
       const observer = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) {
